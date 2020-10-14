@@ -1,9 +1,0 @@
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\bin\Debug\netcoreapp3.1\SolidCqrsFramework.deps.json
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\bin\Debug\netcoreapp3.1\SolidCqrsFramework.dll
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\bin\Debug\netcoreapp3.1\SolidCqrsFramework.pdb
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\obj\Debug\netcoreapp3.1\SolidCqrsFramework.AssemblyInfoInputs.cache
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\obj\Debug\netcoreapp3.1\SolidCqrsFramework.AssemblyInfo.cs
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\obj\Debug\netcoreapp3.1\SolidCqrsFramework.csproj.CoreCompileInputs.cache
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\obj\Debug\netcoreapp3.1\SolidCqrsFramework.dll
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\obj\Debug\netcoreapp3.1\SolidCqrsFramework.pdb
-C:\SolidDev\ExpersCircleSourceCode\SolidCqrsFramework\obj\Debug\netcoreapp3.1\SolidCqrsFramework.csprojAssemblyReference.cache
