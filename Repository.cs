@@ -18,7 +18,7 @@ namespace SolidCqrsFramework
             await _eventsStore.Store(aggregate);
         }
 
-        public async Task<T> GetById(Guid id)
+        public async Task<T> GetById(string id)
         {
             var events = await _eventsStore.LoadEvents(id);
             var aggregate = (T)Activator.CreateInstance(typeof(T), true);

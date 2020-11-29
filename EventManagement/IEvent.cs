@@ -4,7 +4,7 @@ namespace SolidCqrsFramework.EventManagement
 {
     public interface IEvent
     {
-        Guid AggregateId { get; }
+        string AggregateId { get; }
     }
     public interface IInProcessEvent
     {

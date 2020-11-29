@@ -7,6 +7,6 @@ namespace SolidCqrsFramework.EventManagement
     public interface IEventsStore
     {
         Task Store(AggregateRoot aggregate);
-        Task<IEnumerable<Event>> LoadEvents(Guid id, long version = 0);
+        Task<IEnumerable<Event>> LoadEvents(string id, long version = 0);
     }
 }

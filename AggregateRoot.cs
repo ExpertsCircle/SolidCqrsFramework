@@ -8,7 +8,7 @@ namespace SolidCqrsFramework
     public abstract class AggregateRoot
     {
         public long Version { get; private set; }
-        protected AggregateRoot(Guid id)
+        protected AggregateRoot(string id)
         {
             Id = id;
             _uncommittedEvents = new List<Event>();
@@ -16,11 +16,11 @@ namespace SolidCqrsFramework
 
         protected AggregateRoot()
         {
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
             _uncommittedEvents = new List<Event>();
         }
 
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         #region Event storage
 

@@ -28,7 +28,7 @@ namespace SolidCqrsFramework.EventManagement
             await _bus.Publish(es);
         }
 
-        public async Task<IEnumerable<Event>> LoadEvents(Guid id, long version = 0)
+        public async Task<IEnumerable<Event>> LoadEvents(string id, long version = 0)
         {
             var universeEvent = new UniverseEvent { AggrategateId = id };
             if (_eventsByAggregate.ContainsKey(universeEvent) == false)
@@ -40,7 +40,7 @@ namespace SolidCqrsFramework.EventManagement
 
     public class UniverseEvent : ValueObject<UniverseEvent>
     {
-        public Guid AggrategateId { get; set; }
+        public string AggrategateId { get; set; }
         public Guid RevisionId { get; set; }
         
     }
