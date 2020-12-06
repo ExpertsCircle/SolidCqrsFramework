@@ -20,7 +20,7 @@ namespace SolidCqrsFramework.Commanding
 
             dynamic handler = _container.GetService(handlerType);
             if (handler == null)
-                throw new CommandHandlerNotFoundException($"No Command handler found for {nameof(com)}");
+                throw new CommandHandlerNotFoundException($"No Command handler found for {com.Name}");
 
             await Validate(command);
             await handler.ExecuteAsync(command);
