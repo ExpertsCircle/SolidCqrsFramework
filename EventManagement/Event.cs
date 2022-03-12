@@ -1,8 +1,9 @@
 ﻿using System;
+using JustSaying.Models;
 
 namespace SolidCqrsFramework.EventManagement
 {
-    public abstract class Event : IEvent
+    public abstract class Event : Message, IEvent
     {
         public string AggregateId { get;}
         public DateTime Date { get;}

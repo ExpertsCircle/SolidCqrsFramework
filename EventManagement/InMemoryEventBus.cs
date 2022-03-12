@@ -19,10 +19,8 @@ namespace SolidCqrsFramework.EventManagement
         private async Task Publish<T>(T @event) where T : Event
         {
             var evenType = @event.GetType();
-           // var handlerType = typeof(IEventHandler<>).MakeGenericType(evenType);
-
             var handlers = GetHandlers(evenType);
-           // dynamic handlers = _container.GetServices(handlerType);
+
             foreach (var eventHandler in handlers)
             {
                 try
@@ -31,11 +29,7 @@ namespace SolidCqrsFramework.EventManagement
                 }
                 catch (Exception e)
                 {
-                    //Policy.Handle<Exception>()
-                    //    .WaitAndRetryAsync(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) })
-                    //    .ExecuteAsync(await eventHandler.Handle((dynamic)@event));
                     Console.WriteLine(e);
-
                     throw;
                 }
             }
@@ -60,7 +54,7 @@ namespace SolidCqrsFramework.EventManagement
                 if(desEvent is IInProcessEvent)
                     await Publish(desEvent);
                 else
-                    await Publish(desEvent);//PublishToKinesis(desEvent);
+                    await Publish(desEvent); 
 
             }
         }
