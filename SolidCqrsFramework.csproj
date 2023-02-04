@@ -13,12 +13,12 @@
     <RepositoryUrl>https://github.com/solid-computing/SolidCqrsFramework</RepositoryUrl>
     <PackageTags>CQRS, EventSourcing</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.0.0.3</Version>
+    <Version>1.0.0.6</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JustSaying.Models" Version="6.0.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
+    <PackageReference Include="JustSaying.Models" Version="6.0.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />
     <PackageReference Include="Polly" Version="7.1.1" />
