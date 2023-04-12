@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/solid-computing/SolidCqrsFramework</RepositoryUrl>
     <PackageTags>CQRS, EventSourcing</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.0.0.7</Version>
+    <Version>1.0.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>

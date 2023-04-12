@@ -46,14 +46,24 @@ namespace SolidCqrsFramework.Query
 
         private object GetHandler<TResult>(IQuerySpec<TResult> querySpec)
         {
+
+            _logger.LogInformation("Handlers in dictionary:");
+            _logger.LogInformation(string.Join(", ", _dict.Keys));
+            
+            
             if (_dict.ContainsKey(querySpec.GetType()))
             {
                 return _dict[querySpec.GetType()];
             }
 
             var handlerType = typeof(IQueryHandler<,>).MakeGenericType(querySpec.GetType(), typeof(TResult));
-            var handler = _serviceProvider.GetRequiredService(handlerType); 
-            _dict.Add(querySpec.GetType(), handler);
+            var handler = _serviceProvider.GetRequiredService(handlerType);
+
+            if (!_dict.ContainsKey(querySpec.GetType()))
+            {
+                _dict.Add(querySpec.GetType(), handler);
+            }
+
             return handler;
         }
     }
