@@ -27,11 +27,10 @@ namespace SolidCqrsFramework.Query
 
         public async Task<TResult> ExecuteQuery<TResult>(IQuerySpec<TResult> querySpec)
         {
-            var handler = GetHandler(querySpec);
+            _logger.LogInformation($"Handling query {querySpec.GetType()}");
             try
             {
-                _logger.LogInformation($"Handling query {querySpec.GetType()}");
-
+                var handler = GetHandler(querySpec);
                 var result = await (Task<TResult>)((dynamic)handler).Handle((dynamic)querySpec);
                 return result;
             }
