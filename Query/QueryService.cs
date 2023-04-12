@@ -28,16 +28,17 @@ namespace SolidCqrsFramework.Query
         public async Task<TResult> ExecuteQuery<TResult>(IQuerySpec<TResult> querySpec)
         {
             _logger.LogInformation($"Handling query {querySpec.GetType()}");
+            object handler = null;
             try
             {
-                var handler = GetHandler(querySpec);
+                handler = GetHandler(querySpec);
                 var result = await (Task<TResult>)((dynamic)handler).Handle((dynamic)querySpec);
                 return result;
             }
             catch (Exception e)
             {
                 _logger.LogError(e,
-                    $"Query exception occured during handling of {querySpec.GetType()} query in {handler.GetType()}");
+                    $"Query exception occurred during handling of {querySpec.GetType()} query in {handler?.GetType()}");
 
                 throw; //TODO: Decide if throwing is required
             }
