@@ -6,7 +6,4 @@ namespace SolidCqrsFramework.EventManagement
     {
         string AggregateId { get; }
     }
-    public interface IInProcessEvent
-    {
-    }
 }

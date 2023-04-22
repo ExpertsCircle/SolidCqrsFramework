@@ -17,7 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JustSaying.Models" Version="6.0.5" />
+    <PackageReference Include="AWSSDK.CloudWatch" Version="3.7.103.61" />
+    <PackageReference Include="JustSaying" Version="7.0.1" />
+    <PackageReference Include="JustSaying.Models" Version="7.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />

@@ -51,10 +51,7 @@ namespace SolidCqrsFramework.EventManagement
             {
                 var desEvent = (T) Convert.ChangeType(@event, @event.GetType());
 
-                if(desEvent is IInProcessEvent)
-                    await Publish(desEvent);
-                else
-                    await Publish(desEvent); 
+                await Publish(desEvent); 
 
             }
         }
