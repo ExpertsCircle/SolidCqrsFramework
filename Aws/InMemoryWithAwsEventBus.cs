@@ -16,9 +16,11 @@ namespace SolidCqrsFramework.Aws
         private readonly IMessagePublisher _awsMessagePublisher;
         private readonly ILogger<InMemoryEventBus> _logger;
 
-        public InMemoryWithAwsEventBus(IServiceProvider serviceProvider, ILogger<InMemoryEventBus> logger, CloudWatchMetricRecorder metricRecorder)
+        public InMemoryWithAwsEventBus(IServiceProvider serviceProvider, ILogger<InMemoryEventBus> logger, 
+            CloudWatchMetricRecorder metricRecorder, IMessagePublisher awsMessagePublisher)
         {
             _metricRecorder = metricRecorder;
+            _awsMessagePublisher = awsMessagePublisher;
             _serviceProvider = serviceProvider;
             _logger = logger;
             _dict = new Dictionary<Type, object>();
