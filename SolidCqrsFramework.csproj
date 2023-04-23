@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <PackageId>SolidComputing.SolidCqrsFramework</PackageId>
     <Authors>SolidComputing</Authors>
@@ -13,23 +13,17 @@
     <RepositoryUrl>https://github.com/solid-computing/SolidCqrsFramework</RepositoryUrl>
     <PackageTags>CQRS, EventSourcing</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.0.0.8</Version>
+    <Version>1.0.1.1</Version>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.CloudWatch" Version="3.7.103.61" />
-    <PackageReference Include="JustSaying" Version="7.0.1" />
-    <PackageReference Include="JustSaying.Models" Version="7.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />
-    <PackageReference Include="Polly" Version="7.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>..\..\..\Users\robiu\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.CloudWatch" Version="3.7.4.4" />
+        <PackageReference Include="JustSaying" Version="6.0.5" />
+        <PackageReference Include="JustSaying.Models" Version="6.0.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Polly" Version="7.2.2" />
+    </ItemGroup>
 </Project>
