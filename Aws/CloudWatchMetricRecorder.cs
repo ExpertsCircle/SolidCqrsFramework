@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
@@ -7,11 +8,13 @@ namespace SolidCqrsFramework.Aws
 {
     public class CloudWatchMetricRecorder
     {
+        public bool IsInMemory{ get; }
         private readonly AmazonCloudWatchClient _cloudWatchClient;
         private readonly string _namespace;
 
-        public CloudWatchMetricRecorder(string ns)
+        public CloudWatchMetricRecorder(string ns, bool isInMemory)
         {
+            IsInMemory = isInMemory;
             _namespace = ns;
             _cloudWatchClient = new AmazonCloudWatchClient();
         }

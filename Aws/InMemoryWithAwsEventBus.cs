@@ -44,15 +44,6 @@ namespace SolidCqrsFramework.Aws
             }
         }
 
-        private dynamic GetHandlers(Type eventType)
-        {
-            if (_dict.ContainsKey(eventType))
-                return _dict[eventType];
-            var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
-            var handlers = _serviceProvider.GetServices(handlerType);
-            _dict.Add(eventType, handlers);
-            return handlers;
-        }
 
         private dynamic GetDecoratedHandlers(Type eventType)
         {
@@ -84,12 +75,12 @@ namespace SolidCqrsFramework.Aws
                 if (desEvent is INotification)
                 {
                     await PublishToAws(desEvent);
-                    await _metricRecorder.RecordCloudWatchMetric("PublishedEvents_to_Sns", 1, desEvent.GetType().Name);
+                    await _metricRecorder.RecordCloudWatchMetric($"PublishedEvents_to_SNS_{desEvent.GetType().Name}", 1, desEvent.GetType().Name);
                 }
                 else
                 {
                     await Publish(desEvent);
-                    await _metricRecorder.RecordCloudWatchMetric("PublishedEvents_to_Memory", 1, desEvent.GetType().Name);
+                    await _metricRecorder.RecordCloudWatchMetric($"PublishedEvents_to_Memory_{desEvent.GetType().Name}", 1, desEvent.GetType().Name);
                 }
             }
         }

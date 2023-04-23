@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using SolidCqrsFramework.EventManagement;
 
 namespace SolidCqrsFramework.Aws
@@ -22,7 +24,17 @@ namespace SolidCqrsFramework.Aws
         public async Task HandleDecorated(TEvent @event)
         {
             // Record metrics for handling events
-            await _metricRecorder.RecordCloudWatchMetric("PublishedEvents", 1, @event.GetType().Name);
+            var metricName = "HandledEvents_InMemory";
+
+            if(_innerHandler == null) 
+                throw new Exception($"No Inner handler is found for event {@event.GetType().Name}");
+
+            if (!_metricRecorder.IsInMemory)
+            {
+                metricName = "HandledEvents_SNS";
+            }
+
+            await _metricRecorder.RecordCloudWatchMetric(metricName, 1, @event.GetType().Name);
 
             // Call the actual handler
             await _innerHandler.Handle(@event);
