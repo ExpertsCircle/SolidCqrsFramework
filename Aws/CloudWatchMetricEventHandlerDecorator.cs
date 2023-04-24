@@ -24,14 +24,14 @@ namespace SolidCqrsFramework.Aws
         public async Task HandleDecorated(TEvent @event)
         {
             // Record metrics for handling events
-            var metricName = "HandledEvents_InMemory";
+            var metricName = $"HandledEvents_InMemory_{@event.GetType().Name}";
 
             if(_innerHandler == null) 
                 throw new Exception($"No Inner handler is found for event {@event.GetType().Name}");
 
             if (!_metricRecorder.IsInMemory)
             {
-                metricName = "HandledEvents_SNS";
+                metricName = $"HandledEvents_SNS_{@event.GetType().Name}";
             }
 
             await _metricRecorder.RecordCloudWatchMetric(metricName, 1, @event.GetType().Name);
