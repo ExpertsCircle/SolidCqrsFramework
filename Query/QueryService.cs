@@ -27,7 +27,7 @@ namespace SolidCqrsFramework.Query
 
         public async Task<TResult> ExecuteQuery<TResult>(IQuerySpec<TResult> querySpec)
         {
-            _logger.LogInformation($"Handling query {querySpec.GetType()}");
+            _logger.LogTraceWithObject("Handling query in QueryService", new { QueryType = querySpec.GetType()});
             object handler = null;
             try
             {
@@ -37,8 +37,8 @@ namespace SolidCqrsFramework.Query
             }
             catch (Exception e)
             {
-                _logger.LogError(e,
-                    $"Query exception occurred during handling of {querySpec.GetType()} query in {handler?.GetType()}");
+                _logger.LogErrorWithObject(e, "Query exception occurred during handling of query",
+                    new { QueryType = querySpec.GetType(), HandlerType = handler?.GetType() });
 
                 throw; //TODO: Decide if throwing is required
             }
@@ -47,8 +47,7 @@ namespace SolidCqrsFramework.Query
         private object GetHandler<TResult>(IQuerySpec<TResult> querySpec)
         {
 
-            _logger.LogInformation("Handlers in dictionary:");
-            _logger.LogInformation(string.Join(", ", _dict.Keys));
+            _logger.LogTraceWithObject("Handlers in dictionary", new {Count = _dict.Keys.Count, Keys = _dict.Keys});
             
             
             if (_dict.ContainsKey(querySpec.GetType()))
