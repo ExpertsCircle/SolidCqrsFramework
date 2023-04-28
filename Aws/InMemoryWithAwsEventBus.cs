@@ -11,17 +11,17 @@ namespace SolidCqrsFramework.Aws
     {
         private readonly CloudWatchMetricRecorder _metricRecorder;
         private readonly IMessagePublisher _awsMessagePublisher;
-        private readonly IEventProcessor _eventProcessor;
+        private readonly EventProcessor _eventProcessor;
         private readonly ILogger<InMemoryEventBus> _logger;
 
         public InMemoryWithAwsEventBus(ILogger<InMemoryEventBus> logger,
             CloudWatchMetricRecorder metricRecorder, 
             IMessagePublisher awsMessagePublisher,
-            IEventProcessor eventProcessor)
+            IServiceProvider serviceProvider)
         {
             _metricRecorder = metricRecorder;
             _awsMessagePublisher = awsMessagePublisher;
-            _eventProcessor = eventProcessor;
+            _eventProcessor = new EventProcessor(serviceProvider, true);
             _logger = logger;
         }
 

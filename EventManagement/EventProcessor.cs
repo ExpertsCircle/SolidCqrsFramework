@@ -8,7 +8,7 @@ using SolidCqrsFramework.Aws;
 
 namespace SolidCqrsFramework.EventManagement;
 
-public class EventProcessor : IEventProcessor
+public class EventProcessor
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly bool _isInMemory;
