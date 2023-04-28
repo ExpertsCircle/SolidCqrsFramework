@@ -8,13 +8,11 @@ namespace SolidCqrsFramework.Aws
 {
     public class CloudWatchMetricRecorder
     {
-        public bool IsInMemory{ get; }
         private readonly AmazonCloudWatchClient _cloudWatchClient;
         private readonly string _namespace;
 
-        public CloudWatchMetricRecorder(string ns, bool isInMemory)
+        public CloudWatchMetricRecorder(string ns)
         {
-            IsInMemory = isInMemory;
             _namespace = ns;
             _cloudWatchClient = new AmazonCloudWatchClient();
         }
