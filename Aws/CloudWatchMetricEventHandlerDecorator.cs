@@ -41,15 +41,24 @@ namespace SolidCqrsFramework.Aws
                 throw new Exception($"No Inner handler is found for event {@event.GetType().Name}");
 
 
-            // Call the actual handler
-            _logger.LogInformationWithObject("Handling event in event handler", new
+            var dataToLog = new
             {
                 EventName = @event.GetType().Name,
                 HandlerName = _innerHandler.GetType().Name,
                 Payload = @event
-            });
-            
-            await _innerHandler.Handle(@event);
+            };
+
+            _logger.LogInformationWithObject("Handling event in event handler", dataToLog);
+
+            try
+            {
+                await _innerHandler.Handle(@event);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorWithObject(ex, "An error occurred when handling Event", dataToLog);
+                throw;
+            }
 
             _logger.LogInformationWithObject("Event handling Successful", new
             {

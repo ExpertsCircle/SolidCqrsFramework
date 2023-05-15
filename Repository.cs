@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SolidCqrsFramework.EventManagement;
 
@@ -21,6 +22,12 @@ namespace SolidCqrsFramework
         public async Task<T> GetById(string id)
         {
             var events = await _eventsStore.LoadEvents(id);
+
+            if (!events.Any())
+            {
+                return null;
+            }
+
             var aggregate = (T)Activator.CreateInstance(typeof(T), true);
             aggregate.LoadFromHistory(events);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using SolidCqrsFramework.EventManagement;
 
 namespace SolidCqrsFramework
@@ -43,17 +44,32 @@ namespace SolidCqrsFramework
 
         #endregion
 
+        //public void HandleEvent(Event @event, bool isNew = true)
+        //{
+        //    dynamic thisAsDynamic = this;
+        //    var e = Cast(@event, @event.GetType());
+        //    thisAsDynamic.Handle(e);
+
+        //    if (isNew)
+        //        _uncommittedEvents.Add(@event);
+            
+        //    Version++;
+        //}
+
         public void HandleEvent(Event @event, bool isNew = true)
         {
-            dynamic thisAsDynamic = this;
-            var e = Cast(@event, @event.GetType());
-            thisAsDynamic.Handle(e);
+            MethodInfo method = this.GetType().GetMethod("UpdateFrom", BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { @event.GetType() }, null);
+            if (method != null)
+            {
+                method.Invoke(this, new object[] { @event });
+            }
 
             if (isNew)
                 _uncommittedEvents.Add(@event);
-            
+
             Version++;
         }
+
 
         public static dynamic Cast(dynamic obj, Type castTo)
         {
