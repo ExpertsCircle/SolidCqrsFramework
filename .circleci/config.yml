@@ -1,0 +1,34 @@
+version: 2.1
+
+jobs:
+  build_and_push:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:6.0
+    steps:
+      - checkout
+      - run:
+          name: Install .NET Core SDK
+          command: |
+            dotnet --info
+      - run:
+          name: Restore dependencies
+          command: dotnet restore
+      - run:
+          name: Build
+          command: dotnet build --configuration Release --no-restore
+      - run:
+          name: Test
+          command: dotnet test --no-restore --verbosity normal
+      - run:
+          name: Pack
+          command: dotnet pack --no-restore --configuration Release --output ./nupkgs /p:Version=1.0.0.${CIRCLE_BUILD_NUM}
+      - run:
+          name: Push
+          command: dotnet nuget push ./nupkgs/*.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/${CIRCLE_PROJECT_USERNAME}/index.json
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_and_push:
+          context: ExpertsCircle_Prod
