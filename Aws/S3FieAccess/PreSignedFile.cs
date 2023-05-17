@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SolidCqrsFramework.Aws.PreSignedUrlGenerator;
+namespace SolidCqrsFramework.Aws.S3FieAccess;
 
 public class PreSignedFile
 {

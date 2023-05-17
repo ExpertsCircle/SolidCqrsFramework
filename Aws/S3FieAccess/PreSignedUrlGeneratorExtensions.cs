@@ -1,7 +1,7 @@
 ﻿using Amazon.S3;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SolidCqrsFramework.Aws.PreSignedUrlGenerator;
+namespace SolidCqrsFramework.Aws.S3FieAccess;
 
 public static class PreSignedUrlGeneratorExtensions
 {

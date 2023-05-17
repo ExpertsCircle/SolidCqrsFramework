@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SolidCqrsFramework.Aws.PreSignedUrlGenerator
+namespace SolidCqrsFramework.Aws.S3FieAccess
 {
     public interface IPreSignedUrlGenerator
     {
