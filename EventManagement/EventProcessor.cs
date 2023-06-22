@@ -25,7 +25,7 @@ public class EventProcessor
 
     public async Task ProcessEventAsync(Type eventType, dynamic message)
     {
-        _logger.LogTraceWithObject("Processing Event in EventProcessor", new
+        _logger.LogInformationWithObject("Processing Event in EventProcessor", new
         {
             EventName = eventType,
             Message = message
