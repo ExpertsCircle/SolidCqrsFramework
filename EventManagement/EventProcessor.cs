@@ -46,7 +46,27 @@ public class EventProcessor
 
         foreach (var handler in decoratedHandlers)
         {
-            await handler.Handle(message);
+            try
+            {
+                await handler.Handle(message);
+                _logger.LogTraceWithObject("Successfully handled event",
+                    new
+                    {
+                        EventName = eventType.Name,
+                        HandlerName = handler.GetType().Name,
+                    });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorWithObject("Failed to handle event",
+                    new
+                    {
+                        EventName = eventType.Name,
+                        HandlerName = handler.GetType().Name,
+                        ExceptionDetails = ex.ToString()
+                    });
+            }
+            
         }
     }
 
