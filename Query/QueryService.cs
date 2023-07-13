@@ -27,7 +27,7 @@ namespace SolidCqrsFramework.Query
 
         public async Task<TResult> ExecuteQuery<TResult>(IQuerySpec<TResult> querySpec)
         {
-            _logger.LogTraceWithObject("Handling query in QueryService", new { QueryType = querySpec.GetType()});
+            _logger.LogInformationWithObject("Handling query in QueryService", new { QueryType = querySpec.GetType()});
             object handler = null;
             try
             {
@@ -47,7 +47,7 @@ namespace SolidCqrsFramework.Query
         private object GetHandler<TResult>(IQuerySpec<TResult> querySpec)
         {
 
-            _logger.LogTraceWithObject("Handlers in dictionary", new {Count = _dict.Keys.Count, Keys = _dict.Keys});
+            _logger.LogInformationWithObject("Handlers in dictionary", new {Count = _dict.Keys.Count, Keys = _dict.Keys});
             
             
             if (_dict.ContainsKey(querySpec.GetType()))

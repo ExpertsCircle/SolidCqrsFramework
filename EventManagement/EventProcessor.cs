@@ -49,7 +49,7 @@ public class EventProcessor
             try
             {
                 await handler.Handle(message);
-                _logger.LogTraceWithObject("Successfully handled event",
+                _logger.LogInformationWithObject("Successfully handled event",
                     new
                     {
                         EventName = eventType.Name,
@@ -58,7 +58,7 @@ public class EventProcessor
             }
             catch (Exception ex)
             {
-                _logger.LogErrorWithObject("Failed to handle event",
+                _logger.LogInformationWithObject("Failed to handle event",
                     new
                     {
                         EventName = eventType.Name,
@@ -90,7 +90,7 @@ public class EventProcessor
 
         _decoratedHandlers.Add(eventType, decoratedHandlers);
 
-        _logger.LogTraceWithObject("Found decorated handlers for event", new
+        _logger.LogInformationWithObject("Found decorated handlers for event", new
         {
             EventName = eventType,
             DecoratedHandlers = decoratedHandlers.Select(x => x.GetType().Name)
