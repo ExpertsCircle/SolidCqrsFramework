@@ -30,7 +30,7 @@ namespace SolidCqrsFramework.Aws
         {
             foreach (var @event in events)
             {
-                _logger.LogTrace($"Publishing event {@event.GetType().Name}");
+                _logger.LogInformationWithObject("Publishing event", new {EventName = @event.GetType().Name });
                 var desEvent = (T)Convert.ChangeType(@event, @event.GetType());
 
                 //await Publish(desEvent);
@@ -41,7 +41,7 @@ namespace SolidCqrsFramework.Aws
                 if (desEvent is INotification)
                 {
                     await PublishToAws(desEvent);
-                    _logger.LogTrace($"Published event {@event.GetType().Name} to AWS");
+                    _logger.LogInformationWithObject("Published event to AWS", new { EventName = @event.GetType().Name });
                     await _metricRecorder.RecordCloudWatchMetric($"PublishedEvents_to_SNS_{desEvent.GetType().Name}", 1, desEvent.GetType().Name);
                 }
 

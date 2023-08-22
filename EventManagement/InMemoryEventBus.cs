@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using SolidCqrsFramework.Aws.S3FieAccess;
 
 namespace SolidCqrsFramework.EventManagement
 {
     public class InMemoryEventBus : IEventBus
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<InMemoryEventBus> _logger;
         private readonly Dictionary<Type, object> _dict;
 
-        public InMemoryEventBus(IServiceProvider serviceProvider)
+        public InMemoryEventBus(IServiceProvider serviceProvider, ILogger<InMemoryEventBus> logger)
         {
             _serviceProvider = serviceProvider;
+            _logger = logger;
             _dict = new Dictionary<Type, object>();
         }
 
@@ -29,7 +33,10 @@ namespace SolidCqrsFramework.EventManagement
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    _logger.LogErrorWithObject(e, "Error Publishing event", new
+                    {
+                        eventHandler
+                    });
                     throw;
                 }
             }

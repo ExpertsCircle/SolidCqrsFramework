@@ -58,12 +58,12 @@ public class EventProcessor
             }
             catch (Exception ex)
             {
-                _logger.LogInformationWithObject("Failed to handle event",
+                _logger.LogErrorWithObject(ex ,"Failed to handle event",
                     new
                     {
                         EventName = eventType.Name,
                         HandlerName = handler.GetType().Name,
-                        ExceptionDetails = ex.ToString()
+                        ExceptionDetails = ex.Message
                     });
             }
             

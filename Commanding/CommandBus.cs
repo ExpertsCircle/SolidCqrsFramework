@@ -20,7 +20,7 @@ namespace SolidCqrsFramework.Commanding
         {
             using (_logger.BeginScope($"Handing Command {command.GetType().Name}", new { CommandName = command.GetType().Name }))
             {
-                _logger.LogInformationWithObject("Command details", new
+                _logger.LogInformationWithObject("Handing Command details", new
                 {
                     CommandName = command.GetType().Name,
                     Message = command
@@ -43,7 +43,20 @@ namespace SolidCqrsFramework.Commanding
 
                 await Validate(command);
 
-                await handler.ExecuteAsync(command);
+                try
+                {
+                    await handler.ExecuteAsync(command);
+
+                }
+                catch (Exception e)
+                {
+                    _logger.LogErrorWithObject(e, "An error occurred when handing command", new
+                    {
+                        CommandName = com.Name,
+                        ErrorMessage = e.Message
+                    });
+                    throw;
+                }
 
                 _logger.LogInformationWithObject("Command handing was successful", new
                 {

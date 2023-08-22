@@ -52,12 +52,12 @@ namespace SolidCqrsFramework.Aws.S3FieAccess
                 }
                 catch (AmazonS3Exception ex)
                 {
-                    _logger.LogError($"Error encountered on server. Message:'{ex.Message}' when generating pre-signed URL.");
+                    _logger.LogError(ex, $"Error encountered on server. Message:'{ex.Message}' when generating pre-signed URL.");
                     throw;
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Unknown encountered on server. Message:'{ex.Message}' when generating pre-signed URL.");
+                    _logger.LogError(ex, $"Unknown encountered on server. Message:'{ex.Message}' when generating pre-signed URL.");
                     throw;
                 }
             }
