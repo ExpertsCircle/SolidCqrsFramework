@@ -27,7 +27,7 @@ namespace SolidCqrsFramework.Aws.S3FieAccess
             foreach (var objectKey in objectKeys)
             {
                 var keyWithFolder = !string.IsNullOrEmpty(pathPrefix) ? $"{pathPrefix}/{objectKey}" : objectKey;
-                var validUntil = DateTime.UtcNow.AddHours(expireFileInDays);
+                var validUntil = DateTime.UtcNow.AddDays(expireFileInDays);
 
                 var request = new GetPreSignedUrlRequest
                 {
