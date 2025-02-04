@@ -36,6 +36,11 @@ namespace SolidCqrsFramework.EventManagement
 
             return  _eventsByAggregate[universeEvent];
         }
+
+        public IAsyncEnumerable<Event> LoadAllEventsAsync(DateTime? replayUntil = null, DateTime? replayFrom = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class UniverseEvent : ValueObject<UniverseEvent>

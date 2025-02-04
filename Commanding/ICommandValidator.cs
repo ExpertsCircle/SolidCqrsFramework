@@ -2,7 +2,7 @@
 
 namespace SolidCqrsFramework.Commanding
 {
-    public interface ICommandValidator<T> where T : Command
+    public interface ICommandValidator<in T> where T : Command
     {
         Task Validate(T command);
     }

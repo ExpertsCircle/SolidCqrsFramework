@@ -27,7 +27,7 @@ namespace SolidCqrsFramework
 
         private readonly List<Event> _uncommittedEvents;
 
-        public ReadOnlyCollection<Event> UncommittedEvents { get { return _uncommittedEvents.AsReadOnly(); } }
+        public ReadOnlyCollection<Event> UncommittedEvents => _uncommittedEvents.AsReadOnly();
 
         public void MarkClean()
         {
@@ -43,18 +43,6 @@ namespace SolidCqrsFramework
         }
 
         #endregion
-
-        //public void HandleEvent(Event @event, bool isNew = true)
-        //{
-        //    dynamic thisAsDynamic = this;
-        //    var e = Cast(@event, @event.GetType());
-        //    thisAsDynamic.Handle(e);
-
-        //    if (isNew)
-        //        _uncommittedEvents.Add(@event);
-            
-        //    Version++;
-        //}
 
         public void HandleEvent(Event @event, bool isNew = true)
         {

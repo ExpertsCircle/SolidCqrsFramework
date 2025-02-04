@@ -8,5 +8,6 @@ namespace SolidCqrsFramework.EventManagement
     {
         Task Store(AggregateRoot aggregate);
         Task<IEnumerable<Event>> LoadEvents(string id, long version = 0);
+        IAsyncEnumerable<Event> LoadAllEventsAsync(DateTime? replayUntil = null, DateTime? replayFrom = null);
     }
 }
