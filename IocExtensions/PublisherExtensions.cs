@@ -3,44 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Amazon;
-using JustSaying;
-using JustSaying.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using SolidCqrsFramework.EventManagement;
-
 
 namespace SolidCqrsFramework.IocExtensions
 {
     public static class PublisherExtensions
     {
+        /// <summary>
+        /// Registers JustSaying and configures publishers for every type in the supplied assemblies that implements INotification.
+        /// </summary>
         public static IServiceCollection AddPublisher(this IServiceCollection services,
             RegionEndpoint region, params Assembly[] assembliesWithNotifications)
         {
-            services.TryAddSingleton<IMessagePublisher>(provider =>
+            services.AddJustSaying(config =>
             {
-                var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
-                var publisher = CreateMeABus
-                    .WithLogging(loggerFactory)
-                    .InRegion(region.SystemName);
-
-                var types = GetTypesImplementingINotification(assembliesWithNotifications);
-
-                foreach (var notificationType in types)
+                // Configure messaging to use the specified AWS region.
+                config.Messaging(m =>
                 {
-                    var method = publisher.GetType()
-                        .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                        .FirstOrDefault(m => m.Name == "WithSnsMessagePublisher" && m.GetParameters().Length == 0)
-                        ?.MakeGenericMethod(notificationType);
+                    // Note: the WithRegion extension expects a string, e.g. "eu-west-1"
+                    m.WithRegion(region.SystemName);
+                });
 
-                    if (method != null)
+                // Register a topic for every notification type.
+                config.Publications(publications =>
+                {
+                    var notificationTypes = GetTypesImplementingINotification(assembliesWithNotifications);
+                    foreach (var notificationType in notificationTypes)
                     {
-                        method.Invoke(publisher, null);
+                        // Find the generic WithTopic<T>() method on the Publications configuration.
+                        var withTopicMethod = publications.GetType()
+                            .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                            .FirstOrDefault(m => m.Name == "WithTopic" &&
+                                                 m.IsGenericMethod &&
+                                                 m.GetParameters().Length == 0);
+                        if (withTopicMethod != null)
+                        {
+                            var genericMethod = withTopicMethod.MakeGenericMethod(notificationType);
+                            genericMethod.Invoke(publications, null);
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Could not find a suitable WithTopic<T>() method on the Publications configuration.");
+                        }
                     }
-                }
-
-                return publisher;
+                });
             });
 
             return services;
@@ -49,12 +56,13 @@ namespace SolidCqrsFramework.IocExtensions
         private static IEnumerable<Type> GetTypesImplementingINotification(params Assembly[] assemblies)
         {
             var notificationInterface = typeof(INotification);
-
             foreach (var assembly in assemblies)
             {
                 foreach (var type in assembly.GetTypes())
                 {
-                    if (notificationInterface.IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                    if (notificationInterface.IsAssignableFrom(type) &&
+                        !type.IsInterface &&
+                        !type.IsAbstract)
                     {
                         yield return type;
                     }
@@ -62,5 +70,4 @@ namespace SolidCqrsFramework.IocExtensions
             }
         }
     }
-
 }
