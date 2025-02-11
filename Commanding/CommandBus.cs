@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Amazon.S3;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SolidCqrsFramework.Exceptions;
 
@@ -8,31 +9,29 @@ namespace SolidCqrsFramework.Commanding
 {
     public class CommandBus : ICommandBus
     {
-        private readonly IServiceProvider _container;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<CommandBus> _logger;
-        public CommandBus(IServiceProvider container, ILogger<CommandBus> logger)
+
+        public CommandBus(IServiceProvider serviceProvider, ILogger<CommandBus> logger)
         {
-            _container = container;
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
         public async Task Handle<TCommand>(TCommand command) where TCommand : Command
         {
-            using (_logger.BeginScope($"Handing Command {command.GetType().Name}", new { CommandName = command.GetType().Name }))
+            using (_logger.BeginScope($"Handling Command {command.GetType().Name}", new { CommandName = command.GetType().Name }))
             {
-                _logger.LogInformationWithObject("Handing Command details", new
+                _logger.LogInformationWithObject("Handling Command details", new
                 {
                     CommandName = command.GetType().Name,
                     Message = command
                 });
 
-                var com = command.GetType();
-                var handlerType = typeof(ICommandHandler<>).MakeGenericType(com);
-                dynamic handler = _container.GetService(handlerType);
+                using var scope = _serviceProvider.CreateScope();
+                var scopedProvider = scope.ServiceProvider;
 
-
-
-
+                var handler = GetHandler<TCommand>(scopedProvider);
                 if (handler == null)
                     throw new CommandHandlerNotFoundException($"No Command handler found for {command.GetType()}");
 
@@ -41,36 +40,41 @@ namespace SolidCqrsFramework.Commanding
                     HandlerName = handler.GetType().Name
                 });
 
-                await Validate(command);
+                await Validate(command, scopedProvider);
 
                 try
                 {
                     await handler.ExecuteAsync(command);
-
                 }
                 catch (Exception e)
                 {
-                    _logger.LogErrorWithObject(e, "An error occurred when handing command", new
+                    _logger.LogErrorWithObject(e, "An error occurred when handling command", new
                     {
-                        CommandName = com.Name,
+                        CommandName = command.GetType().Name,
                         ErrorMessage = e.Message
                     });
                     throw;
                 }
 
-                _logger.LogInformationWithObject("Command handing was successful", new
+                _logger.LogInformationWithObject("Command handling was successful", new
                 {
                     HandlerName = handler.GetType().Name
                 });
             }
         }
 
-        async Task Validate<TCommand>(TCommand command) where TCommand : Command
+        private dynamic GetHandler<TCommand>(IServiceProvider scopedProvider) where TCommand : Command
         {
-            var com = command.GetType();
-            var handlerType = typeof(ICommandValidator<>).MakeGenericType(com);
+            var commandType = typeof(TCommand);
+            var handlerType = typeof(ICommandHandler<>).MakeGenericType(commandType);
+            return scopedProvider.GetService(handlerType);
+        }
 
-            dynamic validator = _container.GetService(handlerType);
+        private async Task Validate<TCommand>(TCommand command, IServiceProvider scopedProvider) where TCommand : Command
+        {
+            var commandType = typeof(TCommand);
+            var validatorType = typeof(ICommandValidator<>).MakeGenericType(commandType);
+            dynamic validator = scopedProvider.GetService(validatorType);
 
             if (validator != null)
             {
@@ -82,7 +86,7 @@ namespace SolidCqrsFramework.Commanding
                 await validator.Validate(command);
             }
         }
-        }
+    }
 
 
 }
