@@ -56,7 +56,7 @@ namespace SolidCqrsFramework.Aws
             }
             catch (Exception ex)
             {
-                _logger.LogErrorWithObject(ex, "An error occurred when handling Event", dataToLog);
+                _logger.LogErrorWithObject(ex, ex.Message, dataToLog);
                 throw;
             }
 

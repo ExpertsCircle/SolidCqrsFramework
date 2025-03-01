@@ -48,10 +48,10 @@ namespace SolidCqrsFramework.Commanding
                 }
                 catch (Exception e)
                 {
-                    _logger.LogErrorWithObject(e, "An error occurred when handling command", new
+                    _logger.LogErrorWithObject(e, e.Message, new
                     {
                         CommandName = command.GetType().Name,
-                        ErrorMessage = e.Message
+                        InnerErrorMessage = e.InnerException?.Message,
                     });
                     throw;
                 }
