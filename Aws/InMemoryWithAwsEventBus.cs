@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using JustSaying.Messaging;
 using Microsoft.Extensions.Logging;
 using SolidCqrsFramework.EventManagement;
+using SolidCqrsFramework.EventManagement.Publishing;
 
 namespace SolidCqrsFramework.Aws
 {
     public class InMemoryWithAwsEventBus : IEventBus
     {
         private readonly CloudWatchMetricRecorder _metricRecorder;
-        private readonly IMessagePublisher _awsMessagePublisher;
+        private readonly ISnsMessagePublisher _awsMessagePublisher;
         private readonly EventProcessor _eventProcessor;
         private readonly ILogger<InMemoryEventBus> _logger;
 
         public InMemoryWithAwsEventBus(ILogger<InMemoryEventBus> logger,
-            CloudWatchMetricRecorder metricRecorder, 
-            IMessagePublisher awsMessagePublisher,
+            CloudWatchMetricRecorder metricRecorder,
+            ISnsMessagePublisher awsMessagePublisher,
             IServiceProvider serviceProvider)
         {
             _metricRecorder = metricRecorder;
@@ -50,7 +51,7 @@ namespace SolidCqrsFramework.Aws
 
         private async Task PublishToAws<T>(T desEvent) where T : Event
         {
-            await _awsMessagePublisher.PublishAsync(desEvent);
+            await _awsMessagePublisher.PublishAsync(desEvent, CancellationToken.None);
         }
     }
 }

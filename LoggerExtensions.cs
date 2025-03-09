@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace SolidCqrsFramework
 {
     public static class LoggerExtensions
     {
+        private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = false
+        };
+
         public static void LogInformationWithObject(this ILogger logger, string message, object data)
         {
             LogWithObject(logger, LogLevel.Information, message, data);
@@ -16,9 +22,9 @@ namespace SolidCqrsFramework
             LogWithObject(logger, LogLevel.Error, message, data);
         }
 
-        public static void LogErrorWithObject(this ILogger logger, Exception e, string message, object data)
+        public static void LogErrorWithObject(this ILogger logger, Exception exception, string message, object data)
         {
-            LogWithObject(logger, LogLevel.Error, message, data, e);
+            LogWithObject(logger, LogLevel.Error, message, data, exception);
         }
 
         public static void LogTraceWithObject(this ILogger logger, string message, object data)
@@ -36,10 +42,10 @@ namespace SolidCqrsFramework
             var logEntry = new
             {
                 message,
-                data
+                data = GetSafeSerializableData(data)
             };
 
-            var jsonLogEntry = JsonConvert.SerializeObject(logEntry);
+            string jsonLogEntry = JsonSerializer.Serialize(logEntry, SerializerOptions);
 
             if (exception == null)
             {
@@ -50,5 +56,21 @@ namespace SolidCqrsFramework
                 logger.Log(logLevel, exception, jsonLogEntry);
             }
         }
+
+        private static object GetSafeSerializableData(object data)
+        {
+            try
+            {
+                // Try serializing the original data
+                JsonSerializer.Serialize(data, SerializerOptions);
+                return data; // If successful, return the original object
+            }
+            catch (Exception)
+            {
+                // If serialization fails, return a safe string representation
+                return data?.ToString() ?? "Unserializable data";
+            }
+        }
+
     }
 }
