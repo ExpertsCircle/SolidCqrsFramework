@@ -49,7 +49,7 @@ public class EventProcessor
             try
             {
                 await handler.Handle(message);
-                _logger.LogInformationWithObject("Successfully handled event",
+                _logger.LogInformationWithObject($"Successfully handled event {eventType.Name}",
                     new
                     {
                         EventName = eventType.Name,
@@ -58,12 +58,12 @@ public class EventProcessor
             }
             catch (Exception ex)
             {
-                _logger.LogErrorWithObject(ex ,"Failed to handle event",
+                _logger.LogErrorWithObject(ex ,ex.Message,
                     new
                     {
                         EventName = eventType.Name,
                         HandlerName = handler.GetType().Name,
-                        ExceptionDetails = ex.Message
+                        ExceptionDetails = ex.InnerException?.Message ?? ex.Message
                     });
             }
             
