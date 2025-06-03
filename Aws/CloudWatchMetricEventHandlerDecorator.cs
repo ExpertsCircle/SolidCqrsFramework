@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SolidCqrsFramework.EventManagement;
+using SolidCqrsFramework.Exceptions;
 
 namespace SolidCqrsFramework.Aws
 {
@@ -53,6 +54,11 @@ namespace SolidCqrsFramework.Aws
             try
             {
                 await _innerHandler.Handle(@event);
+            }
+            catch (DomainException ex)
+            {
+                _logger.LogWarningWithObject(ex.Message, dataToLog);
+                throw;
             }
             catch (Exception ex)
             {
