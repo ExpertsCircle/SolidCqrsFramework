@@ -46,6 +46,16 @@ namespace SolidCqrsFramework.Commanding
                 {
                     await handler.ExecuteAsync(command);
                 }
+                catch (DomainException ex)
+                {
+                    _logger.LogWarningWithObject(ex.Message, new
+                    {
+                        CommandName = command.GetType().Name,
+                        HandlerName = handler.GetType().Name,
+                        ExceptionType = ex.GetType().Name
+                    });
+                    throw;
+                }
                 catch (Exception e)
                 {
                     _logger.LogErrorWithObject(e, e.Message, new
