@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SolidCqrsFramework.Aws;
+using SolidCqrsFramework.Exceptions;
 
 namespace SolidCqrsFramework.EventManagement;
 
@@ -55,6 +56,16 @@ public class EventProcessor
                         EventName = eventType.Name,
                         HandlerName = handler.GetType().Name,
                     });
+            }
+            catch (DomainException ex)
+            {
+                _logger.LogWarningWithObject(ex.Message, new
+                {
+                    EventName = eventType.Name,
+                    HandlerName = handler.GetType().Name,
+                    ExceptionDetails = ex.InnerException?.Message ?? ex.Message
+                });
+                throw;
             }
             catch (Exception ex)
             {
