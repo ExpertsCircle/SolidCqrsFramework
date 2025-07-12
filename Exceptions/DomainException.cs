@@ -14,6 +14,5 @@ namespace SolidCqrsFramework.Exceptions
         public DomainException(string message, Exception inner) : base(message, inner)
         {
         }
-
     }
 }
