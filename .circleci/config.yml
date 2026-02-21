@@ -3,11 +3,11 @@ version: 2.1
 jobs:
   build_and_push:
     docker:
-      - image: mcr.microsoft.com/dotnet/sdk:6.0
+      - image: mcr.microsoft.com/dotnet/sdk:8.0
     steps:
       - checkout
       - run:
-          name: Install .NET Core SDK
+          name: Verify .NET SDK
           command: |
             dotnet --info
       - run:
@@ -21,7 +21,9 @@ jobs:
           command: dotnet test --no-restore --verbosity normal
       - run:
           name: Pack
-          command: dotnet pack --no-restore --configuration Release --output ./nupkgs /p:Version=1.0.0.${CIRCLE_BUILD_NUM}
+          command: |
+            BASE_VERSION=$(grep -oP '(?<=<Version>)\d+\.\d+\.\d+' SolidCqrsFramework.csproj)
+            dotnet pack --no-restore --configuration Release --output ./nupkgs /p:Version=${BASE_VERSION}.${CIRCLE_BUILD_NUM}
       - run:
           name: Push
           command: dotnet nuget push ./nupkgs/*.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/${CIRCLE_PROJECT_USERNAME}/index.json
@@ -32,3 +34,8 @@ workflows:
     jobs:
       - build_and_push:
           context: ExpertsCircle_Prod
+          filters:
+            branches:
+              only:
+                - main
+                - master
