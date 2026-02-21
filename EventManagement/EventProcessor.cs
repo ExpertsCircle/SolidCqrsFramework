@@ -69,13 +69,9 @@ public class EventProcessor
             }
             catch (Exception ex)
             {
-                _logger.LogErrorWithObject(ex ,ex.Message,
-                    new
-                    {
-                        EventName = eventType.Name,
-                        HandlerName = handler.GetType().Name,
-                        ExceptionDetails = ex.InnerException?.Message ?? ex.Message
-                    });
+                // Exception already logged by CloudWatchMetricEventHandlerDecorator with full context.
+                // Re-logging here would produce duplicate entries in CloudWatch.
+                _ = ex; // suppress unused-variable warning
             }
             
         }

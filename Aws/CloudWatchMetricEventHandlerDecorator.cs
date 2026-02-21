@@ -38,8 +38,13 @@ namespace SolidCqrsFramework.Aws
             // Record metrics for handling events
             var metricName = $"HandledEvents_InMemory_{@event.GetType().Name}";
 
-            if(_innerHandler == null) 
-                throw new Exception($"No Inner handler is found for event {@event.GetType().Name}");
+            if(_innerHandler == null)
+            {
+                _logger.LogErrorWithObject($"CRITICAL: No IEventHandler registered for event type '{@event.GetType().Name}'. " +
+                    "Check DI registrations in Startup/Lambda entrypoint — handler is missing or misconfigured.",
+                    new { EventName = @event.GetType().Name, DecoratorType = GetType().Name });
+                throw new InvalidOperationException($"No Inner handler is found for event {@event.GetType().Name}");
+            }
 
 
             var dataToLog = new
