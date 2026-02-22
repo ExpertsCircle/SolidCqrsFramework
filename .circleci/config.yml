@@ -26,7 +26,7 @@ jobs:
             dotnet pack --no-restore --configuration Release --output ./nupkgs /p:Version=${BASE_VERSION}.${CIRCLE_BUILD_NUM}
       - run:
           name: Push
-          command: dotnet nuget push ./nupkgs/*.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/${CIRCLE_PROJECT_USERNAME}/index.json
+          command: dotnet nuget push ./nupkgs/*.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/${CIRCLE_PROJECT_USERNAME}/index.json --skip-duplicate
 
 workflows:
   version: 2
