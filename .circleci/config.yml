@@ -22,8 +22,12 @@ jobs:
       - run:
           name: Pack
           command: |
-            BASE_VERSION=$(grep -oP '(?<=<Version>)\d+\.\d+\.\d+' SolidCqrsFramework.csproj)
-            dotnet pack --no-restore --configuration Release --output ./nupkgs /p:Version=${BASE_VERSION}.${CIRCLE_BUILD_NUM}
+            BASE_VERSION=$(grep -oP '(?<=<Version>)\d+(\.\d+)+' SolidCqrsFramework.csproj | head -n 1)
+            if [ -z "$BASE_VERSION" ]; then
+              echo "Failed to determine base version from SolidCqrsFramework.csproj" >&2
+              exit 1
+            fi
+            dotnet pack --no-restore --configuration Release --output ./nupkgs /p:Version=${BASE_VERSION}
       - run:
           name: Push
           command: dotnet nuget push ./nupkgs/*.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/${CIRCLE_PROJECT_USERNAME}/index.json --skip-duplicate
