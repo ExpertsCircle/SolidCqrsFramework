@@ -41,9 +41,19 @@ namespace SolidCqrsFramework.Aws
 
                 if (desEvent is INotification)
                 {
-                    await PublishToAws(desEvent);
-                    _logger.LogInformationWithObject("Published event to AWS", new { EventName = @event.GetType().Name });
-                    await _metricRecorder.RecordCloudWatchMetric($"PublishedEvents_to_SNS_{desEvent.GetType().Name}", 1, desEvent.GetType().Name);
+                    try
+                    {
+                        await PublishToAws(desEvent);
+                        _logger.LogInformationWithObject("Published event to AWS", new { EventName = @event.GetType().Name });
+                        await _metricRecorder.RecordCloudWatchMetric($"PublishedEvents_to_SNS_{desEvent.GetType().Name}", 1, desEvent.GetType().Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        // SNS publish failure must not fail the caller — the event is already committed
+                        // to the event store. Log as error so CloudWatch alarms fire, but return 200.
+                        _logger.LogErrorWithObject(ex, "Failed to publish event to SNS — event is committed but SNS notification was not sent",
+                            new { EventName = @event.GetType().Name });
+                    }
                 }
 
             }
