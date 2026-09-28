@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build_and_push:
     docker:
-      - image: mcr.microsoft.com/dotnet/sdk:8.0
+      - image: mcr.microsoft.com/dotnet/sdk:10.0
     steps:
       - checkout
       - run:
