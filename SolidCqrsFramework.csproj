@@ -12,8 +12,15 @@
     <PackageProjectUrl></PackageProjectUrl>
     <PackageTags>CQRS, EventSourcing</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.1.0.18</Version>
+    <Version>1.1.0.19</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The test project lives under Tests/ and builds on its own; keep it out of the library and the package. -->
+    <Compile Remove="Tests/**" />
+    <EmbeddedResource Remove="Tests/**" />
+    <None Remove="Tests/**" />
+  </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.CloudWatch" Version="3.7.402.36" />
