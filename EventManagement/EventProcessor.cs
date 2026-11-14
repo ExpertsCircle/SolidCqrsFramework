@@ -26,11 +26,9 @@ public class EventProcessor
 
     public async Task ProcessEventAsync(Type eventType, dynamic message)
     {
-        _logger.LogInformationWithObject("Processing Event in EventProcessor", new
-        {
-            EventName = eventType,
-            Message = message
-        });
+        // Name and ids only: an event body carries personal data. MessageBodyLogging opts in locally.
+        _logger.LogInformationWithObject("Processing Event in EventProcessor",
+            MessageBodyLogging.ForEvent(eventType, (object)message));
 
         var decoratedHandlers = GetDecoratedHandlers(eventType);
 

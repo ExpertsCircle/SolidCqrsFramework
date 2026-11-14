@@ -47,12 +47,9 @@ namespace SolidCqrsFramework.Aws
             }
 
 
-            var dataToLog = new
-            {
-                EventName = @event.GetType().Name,
-                HandlerName = _innerHandler.GetType().Name,
-                Payload = @event
-            };
+            // Name and ids only, on the Information, Warning and Error lines alike: the event body carries
+            // personal data. The exception and its message stay on the Error line. MessageBodyLogging opts in locally.
+            var dataToLog = MessageBodyLogging.ForEvent(@event.GetType(), @event, _innerHandler.GetType().Name);
 
             _logger.LogInformationWithObject("Handling event in event handler", dataToLog);
 
