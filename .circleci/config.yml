@@ -37,7 +37,7 @@ workflows:
   build:
     jobs:
       - build_and_push:
-          context: ExpertsCircle_Prod
+          context: ExpertsCircle_Packages
           filters:
             branches:
               only:
