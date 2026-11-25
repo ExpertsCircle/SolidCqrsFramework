@@ -22,11 +22,8 @@ namespace SolidCqrsFramework.Commanding
         {
             using (_logger.BeginScope($"Handling Command {command.GetType().Name}", new { CommandName = command.GetType().Name }))
             {
-                _logger.LogInformationWithObject("Handling Command details", new
-                {
-                    CommandName = command.GetType().Name,
-                    Message = command
-                });
+                // Name only: a command body carries personal data. MessageBodyLogging opts in locally.
+                _logger.LogInformationWithObject("Handling Command details", MessageBodyLogging.ForCommand(command));
 
                 using var scope = _serviceProvider.CreateScope();
                 var scopedProvider = scope.ServiceProvider;

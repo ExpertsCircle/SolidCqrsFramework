@@ -33,10 +33,8 @@ namespace SolidCqrsFramework.EventManagement
                 }
                 catch (Exception e)
                 {
-                    _logger.LogErrorWithObject(e, "Error Publishing event", new
-                    {
-                        eventHandler
-                    });
+                    _logger.LogErrorWithObject(e, "Error Publishing event",
+                        MessageBodyLogging.ForEvent(evenType, @event, ((object)eventHandler).GetType().Name));
                     throw;
                 }
             }
